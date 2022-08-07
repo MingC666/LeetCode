@@ -1,0 +1,63 @@
+class Solution {
+public:
+    int countValidWords(string sentence) {
+        int n = sentence.size();
+        vector<string> words;
+        
+        // get words from the sencence
+        for(int i=0; i<sentence.size(); i++)
+        {
+            if(sentence[i]==' ');   // go next
+            else            // start of the word
+            {
+                int start = i;
+                while(i<n && sentence[i]!=' ')
+                {
+                    i++;
+                }
+                words.push_back(sentence.substr(start, i-start));
+            }
+        }
+        
+        // fillter out the invalid words
+        int result = words.size();
+        for(auto s:words)
+        {
+            //cout << s << " " << s.size() << endl;
+            int hyp = 0;
+            int pos = 0;
+            for(int i=0; i<s.size(); i++)
+            {
+                if(isdigit(s[i]))
+                {
+                    result--;
+                    break;;
+                }
+                else if(s[i]== '-')
+                {
+                    hyp++;
+                    if(i==0 || i==s.size()-1 || hyp>1)
+                    {
+                        result--;
+                        break;
+                    }
+                    else if(!isalpha(s[i-1]) || !isalpha(s[i+1]))
+                    {
+                        result--;
+                        break;
+                    }
+                }
+                if(s[i]=='!' || s[i]=='.' || s[i]==',')
+                {
+                    if(i!=s.size()-1)
+                    {
+                        result--;
+                        break;
+                    }
+                }
+            }
+            
+        }
+        return result;
+    }
+};

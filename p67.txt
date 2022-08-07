@@ -1,0 +1,105 @@
+class Solution {
+public:
+    string addBinary(string a, string b) {
+        int size_a = a.size();
+        int size_b = b.size();
+        
+        string result = "";
+        char carry = '0';
+        for(int i=min(size_a, size_b)-1; i>=0; i--)
+        {
+            if(a[i]-48 +b[i]-48 + carry-48 == '0'-48)
+            {
+                result = "0" + result;
+                carry = '0';
+            }
+            else if(a[i]-48+b[i]-48+carry-48 == '1'-48)
+            {
+                result = "1" + result;
+                carry = '0';
+            }
+            else if(a[i]-48+b[i]-48+carry-48 == '2'-48)
+            {
+                result = "0" + result;
+                carry = '1';
+            }
+            else        // =3
+            {
+                result = "1" + result;
+                carry = '1';
+            }
+        }
+        
+        if(size_a > size_b)
+        {
+            for(int i=size_b-1; i>=0; i--)
+            {
+                if(carry == '1')
+                {
+                    if(a[i] == '1')
+                    {
+                        result = '0' + result;
+                    }
+                    else
+                    {
+                        result = "0" + result;
+                        carry = '0';
+                    }
+                }
+                else // carry = 0
+                {
+                    result =  a[i] + result;
+                }
+            }
+            if(carry == '1')
+            {
+                result = "1" + result;
+                reverse(result.begin(), result.end());
+                return result;
+            }
+            else
+            {
+                reverse(result.begin(), result.end());
+                return result;
+            }
+        }
+        
+        if(size_a < size_b)
+        {
+            for(int i=size_a-1; i>=0; i++)
+            {
+                if(carry == '1')
+                {
+                    if(b[i] == '1')
+                    {
+                        result =  '0' + result;
+                    }
+                    else
+                    {
+                       result =  '1' + result;
+                        carry = '0';
+                    }
+                }
+                else // carry = 0
+                {
+                    result =  b[i] + result;
+                }
+            }
+            if(carry == '1')
+            {
+                result = "1" + result;
+                reverse(result.begin(), result.end());
+                return result;
+            }
+            else
+            { 
+                reverse(result.begin(), result.end());
+                return result;
+            }
+        } 
+        
+        reverse(result.begin(), result.end());
+        return result;
+        
+    }
+};

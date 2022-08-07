@@ -1,0 +1,68 @@
+class Solution {
+public:
+    // 'stored' stores the latest needed closed bracket, 
+    bool isValid(string s) {
+        stack<char> stored;
+        int n = s.size();
+        if(n%2==1) return false;
+        
+        for(int i=0; i<n; ++i)
+        {
+            if(s[i] == '(')
+            {
+                stored.push(')');
+            }
+            else if(s[i] == '{')
+            {
+                stored.push('}');
+            }
+            else if(s[i] == '[')
+            {
+                stored.push(']');
+            }
+            else if(stored.empty() || stored.top()!=s[i])       // If it's not open bracket, needed the latest closed bracket 
+            {
+                return false;
+            }
+            else
+            {
+                stored.pop();
+            }
+        }
+        return stored.empty();
+    }
+    
+    bool solution2(string s) {
+        stack<char> stored;
+        int n = s.size();
+        if(n%2==1) return false;
+        
+        int i = 0;
+        while(i<n)
+        {
+            if(!stored.empty() && s[i] == ')' && stored.top()=='(')
+            {
+                stored.pop();
+            }
+            else if(!stored.empty() && s[i] == ']' && stored.top()=='[')
+            {
+                stored.pop();
+            } 
+            else if(!stored.empty() && s[i] == '}' && stored.top()=='{')
+            {
+                stored.pop();
+            }
+            else
+            {
+                // parentheses cannot start with closed one
+                if(s[i]==')' || s[i]==']' || s[i]=='}')
+                    return false;
+                stored.push(s[i]);
+            }
+            i++;
+        }
+        if(stored.empty()) 
+            return true;
+        return false;
+    }
+};

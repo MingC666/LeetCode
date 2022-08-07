@@ -1,0 +1,56 @@
+class Solution {
+public:
+    int totalFruit(vector<int>& fruits) {
+        int n = fruits.size();
+        int left = 0;
+        int result = 0;
+        int sum = 1;
+        int type[2] = {fruits[0], -1};             // [type][#of that type]
+        
+        for(int right=1; right<n; right++)
+        {
+            // find second fruit type
+            if(type[1]==-1)
+            {
+                while(right<n && fruits[right]==type[0])
+                {
+                    sum++;
+                    right++;
+                }
+                if(right>=n) return sum;
+                type[1] = fruits[right];
+            }
+            
+            //  new type of fruit found
+            if(fruits[right]!=type[0] && fruits[right]!=type[1])
+            {
+                result = max(result, sum);
+                int newtype = fruits[right];
+                int remain_type = fruits[right-1];
+                
+                int changeindex = (type[0]==remain_type)? 1 : 0;
+                type[changeindex] = newtype;
+                sum = 1; // one of new type of fruit
+                
+                // move start to new position    type1, type2, type1(new position), type1,  new-type
+                // track back to get the # remain type of fruit
+                left = right;
+                
+                while(left-1>=0 && fruits[left-1]==remain_type)
+                {
+                    left--;
+                    sum++;
+                }
+            }
+            // Otherwise
+            else
+            {
+                sum++;
+            }
+            
+        }
+        
+        result = max(result, sum);
+        return result;
+    }
+};

@@ -1,0 +1,159 @@
+class Solution {
+public:
+    bool isValidSudoku(vector<vector<char>>& board) {
+        for(int r=0; r<9; r++)
+        {
+            for(int c=0; c<9; c++)
+            {
+                char ch = board[r][c];
+                if(ch == '.') continue;
+                
+                for(int i=0; i<9; i++)
+                {
+                    // checking row
+                    if(board[r][i]==ch && i!=c)
+                        return false;
+                    // checking col
+                    if(board[i][c]==ch && i!=r)
+                        return false;
+                    // checking the sub-board
+                    int tr = (r/3)*3 + i/3;
+                    int tc = (c/3)*3 + i%3;
+                    
+                    if(board[tr][tc]==ch && tr!=r && tc!=c)
+                    {
+                        return false;
+                    }
+                }
+            }
+        }
+        
+        return true;
+    }
+    
+    
+    bool wolution2(vector<vector<char>>& board) {
+        int tr=0, tc=0;
+        for(int r=0; r<9; r++)
+        {
+            for(int c=0; c<9; c++)
+            {
+                char ch = board[r][c];
+                if(ch == '.') continue;
+                int tempr=r+1, tempc=c+1;
+                
+                // checking left row has the duplicated
+                while(tempc<9)
+                {
+                    if(board[r][tempc]==ch)
+                    {
+                        cout <<"dd";
+                        return false;
+                    }
+                    tempc++;
+                }
+                
+                // checking down col has the duplicated
+                while(tempr<9)
+                {
+                    if(board[tempr][c]==ch)
+                    {
+                        return false;
+                    }
+                    tempr++;
+                }
+            }
+            bool sub = CheckingSubBoard((tr/9) *3, tc%9, board);
+            if(!sub) 
+                return false;
+            tr+=3;
+            tc+=3;
+        }
+        
+        return true;;
+    }
+    
+    
+    bool solution1(vector<vector<char>>& board) {
+        bool row = Checkingrow(board);
+        if(!row) 
+            return false;
+        bool col = CheckingCol(board);
+        if(!col) 
+            return false;
+        
+        // given top left point, checking 3*3 sub board
+        int r=0, c=0;
+        for(int i=0; i<9; i++)
+        {
+            bool sub;
+            sub = CheckingSubBoard((r/9) *3, c%9, board);
+            if(!sub) 
+                return false;
+            r+=3;
+            c+=3;
+        }
+        
+        return true;;
+    }
+    bool Checkingrow(vector<vector<char>>& board)
+    {
+        
+        for(int r=0; r<9; r++)
+        {
+            vector<int> table(9,1);
+            for(int c=0; c<9; c++)
+            {
+                if(board[r][c] == '.') continue;
+                int index = board[r][c] -'1';
+                table[index]--;
+                if(table[index]!=0)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    bool CheckingCol(vector<vector<char>>& board)
+    {
+        
+        for(int c=0; c<9; c++)
+        {
+            vector<int> table(9,1);
+            for(int r=0; r<9; r++)
+            {
+                if(board[r][c] == '.') continue;
+                int index = board[r][c] -'1';
+                table[index]--;
+                if(table[index]!=0)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    
+    bool CheckingSubBoard(int r, int c, vector<vector<char>>& board)
+    {
+        vector<int> table(9,1);
+        int tempc = c;
+        for(int i=0; i<3; i++)
+        {
+            for(int j=0; j<3;j++,c++)
+            {
+                int index = board[r][c] - '1';
+                if(board[r][c] == '.') continue;
+                table[index]--;
+                if(table[index] != 0)
+                {
+                    return false;
+                }
+            }
+            c = tempc;
+            r++;
+        }
+        return true;
+    }
+};

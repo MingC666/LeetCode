@@ -1,0 +1,53 @@
+class Solution {
+public:
+    int countSquares(vector<vector<int>>& matrix) {
+        int result = 0;
+        int row = matrix.size()-1;
+        int col = matrix[0].size()-1;
+        
+        for(int r=0; r<=row; r++)
+        {
+            for(int c=0; c<=col; c++)
+            {
+                if(matrix[r][c] == 1)
+                {
+                    result += sub_square(r, c, row, col, matrix);
+                }
+            }
+        }
+        
+        return result;
+    }
+    
+    // for each position which [r][c] = 1
+    //              1st |         2nd |         3rd |   checking
+    //                  v             V             v
+    //   1st -->    [r][c],     [r][c+1],     [r][c+2]......
+    //   2nd -->    [r+1][c],   [r+2][c+1],   [r+2][c+2].....
+    //   3rd -->    [r+2][c],   [r+2][c+1],   [r+3][c+2].....   
+    //      .......
+    int sub_square(int r, int c, int row, int col, vector<vector<int>> &matrix)
+    {
+        int square = 0;
+        int side = min(row-r, col-c);       
+        if(side<0) return 0;
+        
+        for(int expand=0; expand<=side; expand++)
+        {
+            int start_row = r+expand;
+            int start_col = c+expand;
+            int start_cols_row =r;
+            int start_rows_col = c;
+            for(int extra=0; extra<=expand; extra++)
+            {
+                if(matrix[start_row][start_rows_col++]!=1 || matrix[start_cols_row++][start_col]!=1)
+                {
+                    return square;
+                }
+                    
+            }
+            square++;
+        }   
+        return square;
+    }
+};

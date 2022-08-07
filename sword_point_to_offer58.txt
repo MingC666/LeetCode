@@ -1,0 +1,19 @@
+class Solution {
+public:
+    string reverseLeftWords(string s, int n) {
+        int sn = s.size();
+        reverse(s.begin(), s.end());
+        reverse(s.begin(), s.begin()+sn-n);
+        reverse(s.begin()+sn-n, s.end());
+
+        return s;
+    }
+
+    string solution2(string s, int n) {
+        int sn = s.size();
+
+        string temp = s.substr(0, n);
+        s += temp;
+        return s.substr(n);
+    }
+};

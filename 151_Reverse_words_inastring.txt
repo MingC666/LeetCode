@@ -1,0 +1,85 @@
+class Solution {
+public:
+    string reverseWords(string s) {
+        int n = s.size();
+        // 1) remove all extra white space
+        int slow = 0;
+        for(int i=0; i<n; i++)
+        {
+            if(s[i] != ' ')
+            {
+                if(slow != 0) 
+                    s[slow++] = ' ';
+                while(i<n && s[i]!=' ')
+                {
+                    s[slow++] = s[i++];
+                }
+            }
+        }
+        s.resize(slow);
+        n = slow;
+        
+        // 2) reverse the string
+        reverse(s.begin(), s.end());
+        
+        // 3) reverse each word in the 's'
+        int start = 0; 
+        int end = -1;
+        for(int i=0; i<n; i++)
+        {
+            if(s[i] == ' ' || i==n-1)
+            {
+                if(i == n-1)
+                {
+                    end = i;
+                }
+                else
+                    end = i-1;
+                while(start < end)
+                {
+                    swap(s[start], s[end]);
+                    start++;
+                    end--;
+                }
+                start = i+1;
+            }
+        }
+        return s;
+    }
+    
+    string solution2(string s) {
+        int n = s.size();
+        vector<string> words;
+        string result = "";
+        
+        // GET ALL WORDS FROM 's'
+        for(int i=0; i<n; i++)
+        {
+            if(s[i] != ' ')
+            {
+                string temp = "";
+                while(s[i] != ' ' && i<n)
+                {
+                    temp += s[i];
+                    if(i==n-1)
+                    {   
+                        words.push_back(temp);
+                        break;
+                    }
+                    i++;
+                }
+                if(i != n-1)
+                    words.push_back(temp);
+            }
+        }
+        
+        // add all words to the result in reverse order
+        for(int i=words.size()-1; i>=0; i--)
+        {
+            result += words[i] + " ";
+        }
+        result.erase(result.size()-1);
+        
+        return result;
+    }
+};

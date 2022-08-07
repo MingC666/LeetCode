@@ -1,0 +1,26 @@
+class Solution {
+public:
+    bool isPalindrome(int x) {
+        long inverse = 0;
+        int temp = x;
+        if(x<0) return false;
+        
+        // else
+        int exp = 0;
+        int cnt = 0;
+        while(temp/10>0 || temp%10>0){
+            cnt++;
+            temp/=10;
+        }
+        temp = x;
+        cnt--;
+        while(temp/10>0 || temp%10>0){
+            inverse += temp%10 * pow(10, cnt--);
+            temp/=10;
+        }
+        if(inverse == x)
+            return true;
+        else
+            return false;
+    }
+};

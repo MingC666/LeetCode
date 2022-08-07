@@ -1,0 +1,75 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    
+    //////////////////////////////////////
+    //////////   SOLUTION2 /////////////
+    ////////////DFS////////////
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        vector<vector <int>> result;
+        dfs(root, result);
+        return result;
+    }
+    
+    void dfs(TreeNode* node, vector<vector <int>>& v, int layer=0)
+    {
+        if(node==nullptr) return;
+        if(v.size() <= layer)
+        {
+            v.push_back({node->val});
+        }
+        else
+        {
+            v[layer].push_back(node->val);
+        }
+        dfs(node->left, v, layer+1);
+        dfs(node->right, v, layer+1);
+    }
+    
+    
+    
+    //////////////////////////////////////
+    //////////   SOLUTION 0 /////////////
+    ////////////BFS////////////
+    vector<vector<int>> levelOrder00(TreeNode* root) {
+        vector<vector <int>> result;
+        queue<TreeNode*> q;
+        
+        if(root != nullptr)
+            q.push(root);
+        
+        while(!q.empty())
+        {
+            int length = q.size();
+            vector<int> temp;
+            for(int i=0; i<length; i++)
+            {
+                TreeNode* nd = q.front();
+                q.pop();
+                temp.push_back(nd->val); 
+                
+                if(nd->left!=nullptr)
+                {
+                    q.push(nd->left);
+                }
+                if(nd->right!=nullptr)
+                {
+                    q.push(nd->right);
+                }
+            }
+            result.push_back(temp);
+            
+        }
+        return result;
+    }
+};

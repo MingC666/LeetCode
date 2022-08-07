@@ -1,0 +1,58 @@
+class Solution {
+public:
+    vector<int> spiralOrder(vector<vector<int>>& matrix) {
+        vector<int> result;
+        int row = matrix.size();
+        int col = matrix[0].size();
+        int n = row*col;
+        
+        int rightwall = col-1;
+        int leftwall = 0;
+        int downwall = row-1;
+        int upwall = 1;
+        int r=0, c=0;
+        while(result.size()<n)
+        {
+            // GO right
+            while(rightwall>=leftwall && c<=rightwall)
+            {
+                result.push_back(matrix[r][c++]);
+                if(result.size()==n) return result;
+            }
+            c--;
+            r++;
+            rightwall--;        
+            
+            // GO down
+            while(n && downwall>=upwall && r<=downwall)
+            {
+                result.push_back(matrix[r++][c]);
+                if(result.size()==n) return result;
+            }
+            r--;
+            c--;
+            downwall--;
+         
+            // GO left
+            while(rightwall>=leftwall && c>=leftwall)
+            {
+                result.push_back(matrix[r][c--]);
+                if(result.size()==n) return result;
+            }
+            c++;
+            r--;
+            leftwall++;
+  
+            // GO down
+            while(downwall>=upwall && r>=upwall)
+            {
+                result.push_back(matrix[r--][c]);
+                if(result.size()==n) return result;
+            } 
+            r++;
+            c++;
+            upwall++;
+        }
+        return result;
+    }
+};

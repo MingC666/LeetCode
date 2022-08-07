@@ -1,0 +1,28 @@
+class Solution {
+public:
+    int minimumLengthEncoding(vector<string>& words) {
+        int result=0;
+        
+        // 1st words
+        result = words[0].length()+1;   
+        string *refe = &words[0];
+        
+        // rest words
+        for(int i=1; i<words.size(); i++){     
+            // *refe not contains words[i]
+            if((*refe).find(words[i]) == std::string::npos){ 
+                // words[i] contains *refe
+                if(words[i].find((*refe)) != std::string::npos){    
+                    refe = new string(words[i]);
+                    result = words[i].length() +1;
+                }
+                else{
+                    refe = new string(*refe + words[i]);
+                    result += words[i].length() +1;
+                }
+            }
+                std::cout<< *refe <<endl;
+        }
+        return result;
+    }
+};

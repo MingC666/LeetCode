@@ -1,0 +1,32 @@
+class Solution {
+public:
+    int minSubArrayLen(int target, vector<int>& nums) {
+        // Initialize 
+        int n = nums.size();
+        int result = INT_MAX;
+        
+        // Go through the 'nums', and using slice window to checking the validation
+        int start = 0;
+        int sum = 0;
+        for(int end=0; end<n; ++end)
+        {
+            sum += nums[end];
+            if(sum >= target)
+            {
+                result = min(result, end-start+1);        // updated result
+                
+                // shrinking the window
+                while(sum >= target )
+                {
+                    sum -= nums[start++];
+                    
+                    // while shrinking, it also possible to get the target value
+                    if(sum >= target)
+                        result = min(result, end-start+1);      
+                }
+                if(result == 1) return 1;        // Not more checking needed. 
+            }
+        }
+        return (result==INT_MAX) ? 0 : result;
+    }
+};

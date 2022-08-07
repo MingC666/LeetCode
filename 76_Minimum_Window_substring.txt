@@ -1,0 +1,51 @@
+class Solution {
+public:
+    string minWindow(string s, string t) {
+        string result = "";
+        int n = s.size();
+        int notmatch = t.size();        // # of not match charcter in 't'
+        int length = INT_MAX;
+        
+        // IF 't' length > 's' length, not result;
+        if(notmatch > n) return result;
+        
+        // MAPPING 't's characters frequence in to map
+        //int freq[128] = {0};
+        unordered_map<char, int> freq;
+        for(auto i:t)
+            freq[i]++;
+        
+        
+        // Initialize
+        int start = 0; 
+        int end = 0;
+        int temp_length = -1;
+        int min_start = -1;
+        
+        // Go through the slice-window in 's'
+        for(; end<n; end++)
+        {
+            if(freq[s[end]] > 0)
+                notmatch--;
+            freq[s[end]]--;
+            
+            while(notmatch == 0)
+            {
+                temp_length = end-start+1;
+                if(length > temp_length)
+                {
+                    length = temp_length;
+                    min_start = start;
+                }
+                // move to next start pos
+                freq[s[start]]++;
+                if(freq[s[start]] >0 )
+                    notmatch++;
+                start++;
+            }
+        }
+        if(length != INT_MAX)
+            result = s.substr(min_start, length);
+        return result;
+    }
+};

@@ -1,0 +1,159 @@
+class Solution {
+public:
+    vector<string> letterCombinations(string digits) {
+        if(digits.size()==0)
+            return {};
+        vector<string> result = {""};
+        
+        string table[8] = { "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+        
+        for(int i=0; i<digits.size(); i++)
+        {
+            int index = digits[i]-'2';
+            vector<string> newresult;
+            for(int j=0; j<table[index].size(); j++)
+            {
+                for(int k=0; k<result.size(); k++)
+                {
+                    newresult.push_back(result[k] + table[index][j]);
+                }
+            }
+            result = newresult;
+        }
+        return result;
+    }
+    
+    
+    
+    vector<string> result;
+        unordered_map<char, string> table = {
+            {'2', "abc"},
+            {'3', "def"},
+            {'4', "ghi"},
+            {'5', "jkl"},
+            {'6', "mno"},
+            {'7', "pqrs"},
+            {'8', "tuv"},
+            {'9', "wxyz"}
+        };
+    vector<string> solution3(string digits) {
+        vector<string> result;
+        unordered_map<char, string> table = {
+            {'2', "abc"},
+            {'3', "def"},
+            {'4', "ghi"},
+            {'5', "jkl"},
+            {'6', "mno"},
+            {'7', "pqrs"},
+            {'8', "tuv"},
+            {'9', "wxyz"}
+        };
+        if(digits.size()==0)
+            return {};
+        decode3(0, "", digits);
+        return result;
+    }
+    void decode3(int index, string str, string digits)
+    {
+        if(digits.size()-1 == index)
+        {
+            char c = digits[index];
+            for(int i=0; i<table[c].size(); i++)
+            {
+                result.push_back(str+table[c][i]);
+            }
+        }
+        else
+        {
+            char c = digits[index];
+            for(int i=0; i<table[c].size(); i++)
+            {
+                string tempstr = str;
+                tempstr += table[c][i];
+                int nextindex = index+1;
+                decode3(nextindex, tempstr, digits);
+            }
+        }
+    }
+    
+    
+    void decode2(char c, string str, string digits, vector<string> &result, unordered_map<char, string> table)
+    {
+        if(digits.size()==0)
+        {
+            for(int i=0; i<table[c].size(); i++)
+            {
+                result.push_back(str+table[c][i]);
+            }
+        }
+        else
+        {
+            for(int i=0; i<table[c].size(); i++)
+            {
+                string tempstr = str;
+                tempstr += table[c][i];
+                decode2(digits[0], tempstr, digits.substr(1,digits.size()-1), result, table);
+            }
+        }
+    }
+    
+    
+    vector<string> solution1(string digits) {
+        if(digits.size()==0)
+            return {};
+        vector<string> result;
+        multimap<char, char> table = {
+            {'2', 'a'}, {'2', 'b'}, {'2', 'c'},
+            {'3', 'd'}, {'3', 'e'}, {'3', 'f'},
+            {'4', 'g'}, {'4', 'h'}, {'4', 'i'},
+            {'5', 'j'}, {'5', 'k'}, {'5', 'l'},
+            {'6', 'm'}, {'6', 'n'}, {'6', 'o'},
+            {'7', 'p'}, {'7', 'q'}, {'7', 'r'}, {'7', 's'},
+            {'8', 't'}, {'8', 'u'}, {'8', 'v'},
+            {'9', 'w'}, {'9', 'x'}, {'9', 'y'}, {'9', 'z'}
+        };
+        
+        decode(digits[0], "", digits.substr(1,digits.size()-1), result, table);
+        return result;
+    }
+    
+    void decode(char c, string str, string digits, vector<string> &result, multimap<char, char> table)
+    {
+        if(digits.size()==0)
+        {
+            auto it = table.equal_range(c);
+            for(auto itr=it.first; itr!=it.second; itr++)
+            {
+                str = itr->second;
+                result.push_back(str);
+            }
+        }
+        // checking if it's last digits, we need return the possible result
+        else if(digits.size()==1)
+        {
+            auto it = table.equal_range(c);
+            for(auto itr=it.first; itr!=it.second; itr++)
+            {
+                string tempstr = str;
+                tempstr += itr->second;
+                auto it2 = table.equal_range(digits[0]);
+                for(auto itr2=it2.first; itr2!=it2.second; itr2++)
+                {
+                    string tempstr2 = tempstr;
+                    tempstr2 += itr2->second;
+                    result.push_back(tempstr2);
+                }
+            }
+        }
+        else
+        {
+            auto it = table.equal_range(c);
+            for(auto itr=it.first; itr!=it.second; itr++)
+            {
+                string tempstr = str;
+                tempstr += itr->second;
+                decode(digits[0], tempstr, digits.substr(1,digits.size()-1), result, table);
+            }
+        } 
+    }
+};

@@ -1,0 +1,20 @@
+class Solution {
+public:
+    int strStr(string haystack, string needle) {
+        int l = needle.length();
+        string sub;
+        if(needle.length()>0 && needle.length()<=haystack.length())
+        {
+            for(int i=0; i<=haystack.length()-l; i++)
+            {
+                sub = haystack.substr(i, l);
+                if(sub == needle)
+                {
+                    return i;
+                }
+                // do nothing
+            }
+        }
+        return -1;
+    }
+};

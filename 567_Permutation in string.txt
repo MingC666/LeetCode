@@ -1,0 +1,48 @@
+class Solution {
+public:
+    bool checkInclusion(string s1, string s2) {
+        int n1 = s1.size();
+        int n2 = s2.size();
+        if(n1 > n2) return false;
+        
+        // Initialize the map
+        map<char, int> s1map;
+        map<char, int> s2map;
+        for(int i='a'; i<='z'; i++)
+        {
+            s1map[i] = 0;
+            s2map[i] = 0;
+        }
+        
+        // mapping 's1'
+        for(auto c : s1) s1map[c]++;
+        
+        // mapping 1st substring of 's2'
+        int start = 0;
+        int end = n1-1;
+        string subs = s2.substr(start, n1);
+        for(auto c:subs)
+        {
+            s2map[c]++;
+        }
+        
+        // loop substring of 's2'
+        for(; start<=n2-n1; start++)
+        {
+            // checking 2 map is the same
+            if(s1map == s2map)
+            {
+                return true;
+            }
+            else
+            {
+                end++;
+                s2map[s2[start]]--;
+                s2map[s2[end]]++;
+            }
+        }
+        
+        return false;
+    }
+    
+};

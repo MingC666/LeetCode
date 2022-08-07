@@ -1,0 +1,66 @@
+class Solution {
+public:
+    // two pint
+    string removeDuplicates(string s) {
+        int n = s.size();
+        int slow = 0;
+        for(int fast=0; fast<n; ++fast)
+        {
+            if(0==slow || s[slow-1]!=s[fast])
+            {
+                s[slow] = s[fast];
+                ++slow;
+            }
+            else
+            {
+                --slow;
+            }
+        }
+        return s.substr(0, slow);
+    }
+    
+    // using string as stack
+    string solution3(string s) {
+        int n = s.size();
+        string result = "";
+               
+        for(int i=0; i<n; i++)
+        {
+            if(s[i] != result.back())
+            {
+                result.push_back(s[i]);
+            }
+            else
+            {
+                result.pop_back();
+            }
+        }
+        return result;
+    }
+    
+    // using stack
+    string solution2(string s) {
+        int n = s.size();
+        stack<char> stored;
+        string result = "";
+        
+        
+        for(int i=0; i<n; i++)
+        {
+            if(stored.empty() || s[i]!=stored.top())
+            {
+                stored.push(s[i]);
+            }
+            else
+            {
+                stored.pop();
+            }
+        }
+        while(!stored.empty())
+        {
+            result = stored.top() + result;
+            stored.pop();
+        }
+        return result;
+    }
+};

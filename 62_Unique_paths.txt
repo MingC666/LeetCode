@@ -1,0 +1,46 @@
+class Solution {
+public:
+    int uniquePaths(int m, int n) {
+        int arr[m][n];
+        
+        // initialize the 1st row AND col to 1, only one way to go these position
+        for(int c=0; c<n; c++) arr[0][c] = 1;
+        for(int r=0; r<m; r++) arr[r][0] = 1;
+        
+        for(int r=1; r<m; r++)
+        {
+            for(int c=1; c<n; c++)
+            {
+                arr[r][c] = arr[r-1][c] + arr[r][c-1];
+            }
+        }
+        return arr[m-1][n-1];
+    }
+    
+    
+    
+    
+    //////////////////////////////////
+    /////// brute force /////////////
+    int uniquePaths00(int m, int n) {
+        if(m==1 && n==1) return 1;
+        int result = 0;
+        go(1, 2, m, n, &result);
+        go(2, 1, m, n, &result);
+        
+        return result;
+    }
+    
+    void go(int r, int c, int m, int n, int* result)
+    {
+        if(r>m || c>n) return;
+        if(r==m && c==n)
+        {
+            (*result)++;
+            return;
+        }
+        
+        go(r, c+1, m, n, result); // go right
+        go(r+1, c, m, n, result); // go down
+    }
+};

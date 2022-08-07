@@ -1,0 +1,50 @@
+class Solution {
+public:
+    int myAtoi(string s) {
+        long long result = 0;
+        bool isneg = false;
+        for(int i=0; i<s.size(); i++)
+        {
+            // find the start of the valid num
+            // skip the white space
+            while(i<s.size() && s[i]==' ')
+            {
+                i++;
+            }
+            // if start with not digit\+/-/0, return 0
+            if(s[i]!='+' && s[i]!='-' && !(s[i]-'0'>=0 && s[i]-'9'<=9))
+            {
+                return result;
+            }
+            if(s[i]=='-') isneg = true;
+            if(s[i]=='+' || s[i]=='-')
+            {
+                i++;
+            }
+            while(i<s.size())
+            {
+                if(s[i]-'0'>=0 && s[i]-'9'<=9)
+                {
+                    result = result*10 + (s[i]-'0');
+                    if(result-1>INT_MAX)
+                        break;
+                    i++;
+                }
+                else
+                    break;
+            }
+            break;
+        }
+        if(isneg)
+            result = -result;
+        if(result > INT_MAX)
+            return INT_MAX;
+        else if(result < INT_MIN)
+            return INT_MIN;
+        return result;
+    }
+
+
+
+	
+};

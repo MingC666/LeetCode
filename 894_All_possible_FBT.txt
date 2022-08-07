@@ -1,0 +1,126 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    vector<TreeNode*> allPossibleFBT(int n) {
+        if(n%2==0) return {};
+        
+        map<int, vector<TreeNode*>> trees;
+        trees[1] = {new TreeNode(0)};
+        
+        if(n==1)
+        {
+            return trees[1];
+        }
+        for(int i=3; i<=n; i=i+2)
+        {
+            for(int j=1; j<i; j+=2)
+            {
+                for(auto left:trees[j])
+                {
+                    for(auto right:trees[i-1-j])
+                    {
+                        TreeNode *temp = new TreeNode(0);
+                        temp->left = left;
+                        temp->right = right;
+                        trees[i].push_back(temp);
+                    }
+                }
+            }
+        }
+        return trees[n];
+    }
+    
+    vector<TreeNode*> solution3(int n) {
+        if(n%2==0) return {};
+        
+        if(n==1)
+            return {new TreeNode(0)};
+        
+        vector<TreeNode*> trees;
+        for(int i=1; i<n; i+=2)
+        {
+            for(auto left:allPossibleFBT(i))
+            {
+                for(auto right: allPossibleFBT(n-i-1))
+                {
+                    TreeNode* temp = new TreeNode(0);
+                    temp->left = left;
+                    temp->right = right;
+                    trees.push_back(temp);
+                        
+                }
+            }
+        }
+        return trees;
+    }
+    
+    vector<TreeNode*> solution2(int n) {
+        if(n%2==0) return {};
+        
+        int size = (n+1)/2;     // size: [n:size]--   [1:1]  [3:2] [5:3] [7:4]........
+        vector<vector <TreeNode*>> memo;
+        
+        memo.push_back({new TreeNode(0)});                                      // n=1
+        if(n==1) return memo[0];
+        
+        memo.push_back({new TreeNode(0, new TreeNode(0), new TreeNode(0))});    // n=3
+        if(n==3) return memo[1];
+        
+        
+        for(int i=2; i<size; i++)                   // for all others, new tree will be combination of previous possible combine
+        {
+            vector<TreeNode*> trees;
+            for(int j=0; j<i; j++)                  // for saying:  7 = 1 + pos(0)[n=1] + pos(3)[n=5]
+            {
+                for(auto left:memo[j])
+                {
+                    for(auto right:memo[i-j-1])
+                    {
+                        TreeNode *temp = new TreeNode(0);
+                        temp->left = left;
+                        temp->right = right;
+                        trees.push_back(temp);
+                    }
+                }
+            }
+            
+            memo.push_back(trees);
+        }
+        return memo[size-1];
+    }
+    
+    vector<TreeNode*> solution1(int n) {
+        if(n%2==0) return {};
+        if(n==1)
+        {
+            return {new TreeNode(0)};
+        }
+        
+        vector<TreeNode*> result;
+        
+        for(int i=1; i<n; i=i+2)
+        {
+            for(auto left:allPossibleFBT(i))
+            {
+                for(auto right:allPossibleFBT(n-i-1))
+                {
+                    auto root = new TreeNode(0);
+                    root->left = left;
+                    root->right = right;
+                    result.push_back(root);
+                }
+            }
+        }
+        return result;
+    }
+};

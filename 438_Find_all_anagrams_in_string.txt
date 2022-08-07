@@ -1,0 +1,47 @@
+class Solution {
+public:
+    vector<int> findAnagrams(string s, string p) {
+        vector<int> dicts (26,0);
+        vector<int> dictp (26,0);
+        vector<int> result;
+        
+        int n_s = s.size();
+        int n_p = p.size();
+        if(n_s < n_p) return result;
+        
+        // initilize the dictionary
+        for(int i=0; i<n_p; i++)
+        {
+            dicts[s[i]-'a']++;
+            dictp[p[i]-'a']++;
+        }
+        
+        // go through the string 's' and checking if they are the same
+        int i=0;
+        for(; i<n_s-n_p; i++)
+        {
+            if(dic_match(dicts, dictp))
+            {
+                result.push_back(i);
+            }
+            dicts[s[i]-'a']--;
+            dicts[s[i+n_p]-'a']++;
+        }
+        
+        if(dic_match(dicts, dictp))
+        {
+            result.push_back(i);
+        }
+        return result;
+    }
+    
+    bool dic_match(const vector<int>& v1, const vector<int>& v2)
+    {
+        for(int i=0; i<26; i++)
+        {
+            if(v1[i] != v2[i])
+                return false;
+        }
+        return true;
+    }
+};

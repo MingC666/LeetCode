@@ -1,0 +1,38 @@
+class Solution {
+public:
+    vector<int> sortedSquares(vector<int>& nums) {
+        
+        // Initialize
+        int n = nums.size();
+        // Dealing 1 element case and all positive elements case
+        if(nums[0]>=0 || nums.size()==1)
+        {
+            for(int i=0; i<n; i++)
+                nums[i] *= nums[i];
+            
+            return nums;
+        }
+        vector<int> result(n);
+        cout << result.size();
+        
+        // using two point travel nums left and right
+        int left = 0;
+        int right = n-1;
+        int index = right;
+        while(index >= 0)
+        {
+            if(abs(nums[left]) > abs(nums[right]))
+            {
+                result[index--] = nums[left]*nums[left];
+                ++left;
+            }
+            else
+            {
+                result[index--] = nums[right]*nums[right];
+                --right;
+            }
+        }
+        
+        return result;
+    }
+};
