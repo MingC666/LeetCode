@@ -1,0 +1,88 @@
+/////// using a 'nullptr' on the top of the node that will be processing
+///////////////////// PRE-ORDER ///////////////////   // node -> left -> right
+vector<int> preorderTraversal(TreeNode* root) {					
+        vector<int> result;
+        stack<TreeNode*> st;
+
+        if(root != nullptr)
+            st.push(root);
+
+        while(!st.empty())
+        {
+            TreeNode* temp = st.top();
+            if(temp != nullptr)
+            {
+                st.pop();
+                if(temp->right) st.push(temp->right);				// right node
+                if(temp->left)  st.push(temp->left);				// leftnode
+                st.push(temp);                                      		// node
+                st.push(nullptr);
+            }
+            else
+            {
+                st.pop();
+                temp = st.top();
+                result.push_back(temp->val);
+                st.pop();
+            }
+        }
+        return result;
+ }
+
+///////////////////// POST ORDER ///////////////////   //  left -> right -> root
+vector<int> postorderTraversal(TreeNode* root) {
+        vector<int> result;
+        stack<TreeNode*> st;
+
+        if(root!=nullptr) st.push(root);
+        while(!st.empty())
+        {
+            TreeNode *temp = st.top();
+            if(temp!=nullptr)
+            {
+                st.push(nullptr);				// node
+                if(temp->right) st.push(temp->right);		// right
+                if(temp->left) st.push(temp->left);		// left
+            }
+            else
+            {
+                st.pop();
+                temp = st.top();
+                st.pop();
+                result.push_back(temp->val);
+            }
+        }
+        return result;
+    }  
+}
+
+
+///////////////////// INORDER ///////////////////   //  left -> node ->right
+vector<int> inorderTraversal(TreeNode* root) {
+        vector<int> result;
+        stack<TreeNode*> st;
+
+        // push a nullptr ont the top of every node that should be precess
+        if(root != nullptr)
+            st.push(root);
+        while(!st.empty())
+        {
+            TreeNode* temp = st.top();
+            if(temp != nullptr)
+            {
+                st.pop();
+                if(temp->right)     st.push(temp->right);       // right
+                st.push(temp);                                  // node
+                st.push(nullptr);
+                if(temp->left)      st.push(temp->left);        // left
+            }
+            else
+            {
+                st.pop();
+                temp = st.top();
+                st.pop();
+                result.push_back(temp->val);
+            }
+        }
+        return result;
+    }

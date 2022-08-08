@@ -1,0 +1,93 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    vector<int> largestValues(TreeNode* root) {
+        vector<int> result;
+        
+        dfs2(root, 0, result);
+        return result;
+    }
+    
+    void dfs2(TreeNode* root, int lv, vector<int> &res)
+    {
+        if(root == nullptr) return;
+        if(lv < res.size())
+        {
+            res[lv] = max(res[lv], root->val);
+        }
+        else
+        {
+            res.push_back(root->val);
+        }
+        dfs2(root->left, lv+1, res);
+        dfs2(root->right, lv+1, res);
+    }
+    
+    /////////////////RECURSION
+    vector<int> solution3(TreeNode* root) {
+        vector<int> result;
+        int dp = depth(root);
+        map<int, int> mp;
+        for(int i=0; i<dp; ++i)
+            mp[i] = INT_MIN;
+        
+        dfs(root, 0, mp);
+        for(auto it:mp)
+            result.push_back(it.second);
+        return result;
+    }
+    void dfs(TreeNode* root, int lv, map<int, int> &mp)
+    {
+        if(root == nullptr) return;
+        
+        mp[lv] = max(mp[lv], root->val);
+        dfs(root->left, lv+1, mp);
+        dfs(root->right, lv+1, mp);
+    }
+    
+    int depth(TreeNode *root)
+    {
+        if(root == nullptr) return 0;
+        return max(depth(root->left), depth(root->right))+1;
+    }
+    
+    
+    
+    // QUEUE BFS
+    vector<int> solution2(TreeNode* root) {
+        vector<int> result;
+        queue<TreeNode*> q;
+        if(root != nullptr)
+            q.push(root);
+        
+        while(!q.empty())
+        {
+            int n = q.size();
+            int max_val = INT_MIN;
+            for(int i=0; i<n; ++i)
+            {
+                TreeNode *node = q.front();
+                q.pop();
+                max_val = max(max_val, node->val);
+                
+                if(node->left)
+                    q.push(node->left);
+                if(node->right)
+                    q.push(node->right);
+            }
+            result.push_back(max_val);
+        }
+        
+        return result;
+    }
+};

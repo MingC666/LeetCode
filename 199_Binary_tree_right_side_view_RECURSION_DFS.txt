@@ -1,0 +1,74 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    vector<int> rightSideView(TreeNode* root) {
+        // There are most 101 layers of the tree, initialize the right most 'val' be -1
+        vector<int> rightview(101, -1);
+        // initialize result
+        vector<int> result;
+        
+        preorderTraversal(root, 0, rightview);
+        
+        for(auto val:rightview)
+        {
+            if(val != -1)
+                result.push_back(val);
+        }
+        return result;
+    }
+    
+    // Using preorder traversal of tree to update each layer's value
+    // since the order is NODE-LEFT-RIGHT, it will be the right most value for each view[lavyer]
+    void preorderTraversal(TreeNode *root, int lv, vector<int> &view)
+    {
+        if(root == nullptr)
+            return;
+        view[lv] = root->val;
+        preorderTraversal(root->left, lv+1, view);
+        preorderTraversal(root->right, lv+1, view);
+    }
+    
+    // Using queue, 
+    vector<int> solution2(TreeNode* root) {
+        vector<int> result;
+        queue<TreeNode*> q;
+        if(root != nullptr)
+        {
+            q.push(root);
+        }
+        
+        while(!q.empty())
+        {
+            int n = q.size();
+            for(int i=0; i<n; ++i)
+            {
+                TreeNode *node = q.front();
+                q.pop();
+                if(node->left)
+                {
+                    q.push(node->left);
+                }
+                if(node->right)
+                {
+                    q.push(node->right);
+                }
+                if(i==n-1)
+                {
+                    result.push_back(node->val);
+                }
+            }
+        }
+        
+        return result;
+    }
+};
