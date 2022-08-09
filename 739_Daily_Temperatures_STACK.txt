@@ -1,0 +1,59 @@
+class Solution {
+public:
+    vector<int> dailyTemperatures(vector<int>& temperatures) {
+        int n = temperatures.size();
+        vector<int> result(n, 0);
+        
+        stack<int> st;          // stored the index of 'temperatures'
+        for(int i=0; i<n; ++i)
+        {
+            while(!st.empty() && temperatures[i]>temperatures[st.top()])
+            {
+                result[st.top()] = i-st.top();
+                st.pop();
+            }
+            st.push(i);
+        }
+        return result;
+    }
+    
+    // STACK backward
+    vector<int> solution3(vector<int>& temperatures) {
+        int n = temperatures.size();
+        vector<int> result(n, 0);
+        
+        // From right to left, the top of 'st' value is not greater than the value below the stack
+        stack<int> st;          // stored the index of 'temperatures'
+        for(int i=n-1; i>=0; --i)
+        {
+            while(!st.empty() && temperatures[st.top()]<=temperatures[i])
+                st.pop();
+            if(!st.empty())
+                result[i] = st.top() - i;
+            st.push(i);
+        }
+        return result;
+    }
+    
+    // BRUTE-FORCE
+    vector<int> solution2(vector<int>& temperatures) {
+        vector<int> result;
+        int n = temperatures.size();
+        
+        for(int i=0; i<n; ++i)
+        {
+            result.push_back(0);
+            int day = 1;
+            for(int j=i+1; j<n; ++j, ++day)
+            {
+                if(temperatures[j] > temperatures[i])
+                {
+                    result[i] = day;
+                    break;
+                }
+            }
+        }
+        
+        return result;
+    }
+};
