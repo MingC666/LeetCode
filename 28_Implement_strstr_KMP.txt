@@ -8,7 +8,9 @@ public:
         int next[n];
         getNext(next, needle);
         
-        // for(int i=0; i<n; ++i) cout << next[i]<<" ";
+        
+	// i: current index of string 'haystack'
+	// j: the match character
         for(int i=0, j=0; i<h; ++i)
         {
             while(j>0 && haystack[i]!=needle[j])

@@ -1,0 +1,33 @@
+class Solution {
+public:
+    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
+        vector<vector<int>> result;
+        vector<int> subresult;
+        sort(candidates.begin(), candidates.end());
+        
+        backtracking(0, 0, target, candidates, subresult, result);
+        return result;
+    }
+    
+    void backtracking(int index, int sum, int target, const vector<int> &candidates, vector<int> &sub, vector<vector<int>> &result)
+    {
+        if(sum == target)
+        {
+            result.push_back(sub);
+            return;
+        }
+        if(sum > target)
+            return;
+        
+        for(int i=index; i<candidates.size() && sum+candidates[i]<=target; ++i)
+        {
+            if(i>index && candidates[i]==candidates[i-1])
+                continue;
+            sum += candidates[i];
+            sub.push_back(candidates[i]);
+            backtracking(i+1, sum, target, candidates, sub, result);
+            sum -= candidates[i];
+            sub.pop_back();
+        }
+    }
+};

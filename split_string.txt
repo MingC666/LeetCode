@@ -1,0 +1,12 @@
+#include <sstream>
+vector<string> split(const string &s, char delimiter)
+{
+  vector<string> result;
+  stringstream ss = s;
+  string word;
+
+  while(getline(ss, word, delimiter))
+    result.push_back(word);
+
+  return result;
+}
