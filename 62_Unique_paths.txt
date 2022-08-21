@@ -44,3 +44,31 @@ public:
         go(r+1, c, m, n, result); // go down
     }
 };
+
+
+///////////////////// JAVA
+class Solution {
+    public int uniquePaths(int m, int n) {
+        int[][] table = new int[m][n];
+        
+        // initialize first row and col
+        for(int r=0; r<m; ++r)
+        {
+            table[r][0] = 1;
+        }
+        for(int c=0; c<n; ++c)
+        {
+            table[0][c] = 1;
+        }
+
+        for(int row=1; row<m; ++row)
+        {
+            for(int col=1; col<n; ++col)
+            {
+                table[row][col] = table[row-1][col] + table[row][col-1];
+            }
+        }
+
+        return table[m-1][n-1];
+    }
+}
