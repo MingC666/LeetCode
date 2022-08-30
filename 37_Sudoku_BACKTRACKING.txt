@@ -1,0 +1,132 @@
+class Solution {
+public:
+    void solveSudoku(vector<vector<char>>& board) {
+        backtracking(board);
+    }
+    
+    
+    bool backtracking(vector<vector<char>> &board)
+    {
+        for(int r=0; r<9; ++r)
+        {
+            for(int c=0; c<9; ++c)
+            {
+                if(board[r][c] != '.')
+                    continue;
+                for(char val='1'; val<='9'; ++val)
+                {   
+                    if(isValid(r,c, val, board))    // checking if the 'val' can fit the position
+                    {
+                        board[r][c] = val;
+                        if(backtracking(board))
+                        {
+                            return true;
+                        }
+                        board[r][c] = '.';
+                    }
+                }
+                // if all 9 digits are not fit, there is not a answer
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    bool isValid(int r, int c, int val, const vector<vector<char>> &board)
+    {
+        // checking row
+        for(int row=0; row<9; ++row)
+        {
+            if(board[row][c] == val)
+                return false;
+        }
+        
+        // checking col
+        for(int col=0; col<9; ++col)
+        {
+            if(board[r][col] == val)
+                return false;
+        }
+        
+        // checking sub square
+        int subr = r/3 *3;
+        int subc = c/3 *3;
+        for(int i=subr; i<subr+3; ++i)
+        {
+            for(int j=subc; j<subc+3; ++j)
+            {
+                if(board[i][j] == val)
+                    return false;
+            }
+        }
+        return true;
+    }
+};
+
+
+//////////////////////////////////////////////////////////////////////////////
+/////////////////////////////   JAVA ////////////////////////////////////////
+
+
+class Solution {
+    public void solveSudoku(char[][] board) {
+        boolean hasresult = backtracking(board);
+    }
+
+    public boolean backtracking(char[][] board)
+    {
+        for(int row=0; row<9; ++row)
+        {
+            for(int col=0; col<9; ++col)
+            {
+                if(board[row][col] != '.')
+                {
+                    continue;
+                }
+                for(char val='1'; val<='9'; ++val)
+                {
+                    if(isValid(row, col, val, board))
+                    {
+                        board[row][col] = val;
+                        if(backtracking(board))
+                        {
+                            return true;
+                        }
+                        board[row][col] = '.';
+                    }
+                }
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean isValid(int row, int col, int val, char[][] board)
+    {
+        // checking row and col has the 'val'
+        for(int i=0; i<9; ++i)
+        {
+            if(board[row][i]==val || board[i][col]==val)
+            {
+                return false;
+            }
+        }
+
+        int sub_row = row/3 *3;
+        int sub_col = col/3 *3;
+        for(int i=sub_row; i<sub_row+3; ++i)
+        {
+            for(int j=sub_col; j<sub_col+3; ++j)
+            {
+                if(board[i][j] == val)
+                {
+                    return false;
+                }
+            }
+        }
+
+        // if not exist
+        return true;
+
+    }
+}

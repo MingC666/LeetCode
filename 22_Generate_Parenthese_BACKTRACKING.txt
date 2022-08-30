@@ -1,0 +1,99 @@
+class Solution {
+public:
+    vector<string> generateParenthesis(int n) {
+        vector<string> result;
+        string s(n*2, '0');
+        solution(n, n, 0, s, result);
+        return result;
+    }
+    
+    void solution(int open, int close, int index, string &s, vector<string> &res)
+    {
+        if(open==0 && close==0)
+        {
+            res.push_back(s);
+            return;
+        }
+        if(open>0)
+        {
+            s[index] = '(';
+            solution(open-1, close, index+1, s, res);
+        }
+        if(close>open)
+        {
+            s[index] = ')';
+            solution(open, close-1, index+1, s, res);
+        }
+    }
+};
+
+
+//////////////////////////////// Java
+class Solution {
+    public List<String> generateParenthesis(int n) {
+        List<String> result = new ArrayList();
+        backtracking(result, new StringBuilder(), n, n);
+        return result;
+    }
+    public void backtracking(List<String> res, StringBuilder str, int open, int close)
+    {
+        if(open==0 && close==0)
+        {
+            res.add(str.toString());
+            return;
+        }
+        if(open>0)
+        {
+            str.append("(");
+            backtracking(res, str, open-1, close);
+            str.deleteCharAt(str.length()-1);
+        }
+        if(close>open)
+        {
+            str.append(")");
+            backtracking(res, str, open, close-1);
+            str.deleteCharAt(str.length()-1);
+        }
+    }
+    
+    public List<String> solution1(int n) {
+        List<String> result = new ArrayList();
+        
+        if(n==0)
+            result.add("");
+        else
+        {
+            for(int c=0; c<n; ++c)
+            {
+                for(String left:generateParenthesis(c))
+                    for(String right:generateParenthesis(n-1-c))
+                        result.add("(" + left + ")" + right);
+            }
+        }
+        
+        return result;
+    }
+}
+
+
+///////////////////Python
+class Solution:
+    def generateParenthesis(self, n: int) -> List[str]:
+        result = []
+        
+        def backtracking(s="", left=n, right=n):
+            if left==0 and right==0:
+                result.append(s)
+            if left>0:
+                s += "("
+                backtracking(s, left-1, right)
+                s = s[:-1]
+            if right>left:
+                s += ")"
+                backtracking(s, left, right-1)
+                s = s[:-1]
+                
+        backtracking()
+        return result
+            
+        

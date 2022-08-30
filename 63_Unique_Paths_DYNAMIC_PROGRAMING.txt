@@ -1,0 +1,70 @@
+class Solution {
+public:
+    int uniquePathsWithObstacles(vector<vector<int>>& obstacleGrid) {
+        int m = obstacleGrid.size();
+        int n = obstacleGrid[0].size();
+        vector<int> dp(n, 0);
+        
+        // get first row
+        for(int col=0; col<n; ++col)
+        {
+            if(obstacleGrid[0][col] == 1)
+                break;
+            else
+                dp[col] = 1;
+        }
+        
+        // from 2nd row,
+        for(int row=1; row<m; ++row)
+        {
+            for(int col=0; col<n; ++col)
+            {
+                if(obstacleGrid[row][col] == 1)
+                    dp[col] = 0;
+                else if(col != 0)
+                {
+                    dp[col] = dp[col] + dp[col-1];
+                }
+            }
+        }
+        
+        return dp[n-1];
+    }
+    
+    int solution2(vector<vector<int>>& obstacleGrid) {
+        int m = obstacleGrid.size();
+        int n = obstacleGrid[0].size();
+        vector<vector<int>> table(m, vector<int>(n, 0));
+        
+        for(int row=0; row<m; ++row)
+        {
+            if(obstacleGrid[row][0] == 1)
+                break;
+            else
+                table[row][0] = 1;
+        }
+        for(int col=0; col<n; ++col)
+        {
+            if(obstacleGrid[0][col] == 1)
+                break;
+            else
+                table[0][col] = 1;
+        }
+        
+        
+        for(int row=1; row<m; ++row)
+        {
+            for(int col=1; col<n; ++col)
+            {
+                if(obstacleGrid[row][col] == 1)
+                    continue;
+                else
+                {
+                    table[row][col] = table[row-1][col]+table[row][col-1];
+                }
+            }
+        }
+        
+        return table[m-1][n-1];
+    }
+};

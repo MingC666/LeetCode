@@ -1,0 +1,52 @@
+class Solution {
+public:
+    int removeElement(vector<int>& nums, int val) {
+        int left = 0;
+        int right = nums.size()-1;
+        while(left <= right)
+        {
+            // find the leftmost index where nums[] == val
+            while(right>=left && nums[left]!=val)
+            {
+                ++left;
+            }
+            // find the rightmost index where nums[] != val
+            while(right>=left && nums[right]==val )
+            {
+                --right;
+            }
+            if(right > left)
+            {
+                nums[left++] = nums[right--];
+            }
+        }
+        return left;
+    }
+    
+    int solution3(vector<int>& nums, int val) {
+        int n = nums.size();
+        int i = 0;
+        while(i < n)
+        {
+            if(nums[i] == val)
+            {
+                nums[i] = nums[n-1];
+                --n;
+            }
+            else
+                ++i;
+        }
+        return n;
+    }
+    
+    int solution2(vector<int>& nums, int val) {
+        int n = nums.size();
+        int slow = 0;
+        for(int fast=0; fast<n; ++fast)
+        {
+            if(nums[fast] != val)
+                nums[slow++] = nums[fast];
+        }
+        return slow;
+    }
+};

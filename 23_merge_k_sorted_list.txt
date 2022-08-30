@@ -1,0 +1,118 @@
+```
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+
+class Solution {
+public:
+    struct Comp{
+        bool operator()(const ListNode* a, const ListNode* b){
+            return (a->val > b->val);
+        }
+    };
+   ListNode* mergeKLists(vector<ListNode*>& lists) {
+       priority_queue<ListNode*, vector<ListNode*>, Comp> pq;
+       
+       for(int i=0; i<lists.size(); ++i)
+       {
+           ListNode* temp = lists[i];
+           if(temp!=nullptr)
+           {
+               pq.push(temp);
+           }
+       }
+       
+       ListNode *dummy = new ListNode(0);
+       ListNode *cur = dummy;
+       while(pq.size() > 0)
+       {
+           ListNode* temp = pq.top();
+           pq.pop();
+           
+           cur->next = temp;
+           cur = cur->next;
+           
+           if(temp->next != nullptr)
+               pq.push(temp->next);
+       }
+       return dummy->next;
+    }
+    
+    
+    // merge each list with result list
+    ListNode* solution3(vector<ListNode*>& lists) {
+        ListNode *result = nullptr;
+        
+        //merge all list to the result list 
+        for(int i=0; i<lists.size(); ++i)
+        {
+            result = mergetwo(result, lists[i]);
+        }
+        return result;
+    }
+    
+    ListNode* mergetwo(ListNode *list1, ListNode *list2)
+    {
+        if(list1 == nullptr)
+        {
+            return list2;
+        }
+        if(list2 == nullptr)
+        {
+            return list1;
+        }
+        if(list1->val < list2->val)
+        {
+            list1->next = mergetwo(list1->next, list2); 
+            return list1;
+        }
+        else
+        {
+            list2->next = mergetwo(list1, list2->next); 
+            return list2;
+        }
+    }
+    
+    
+    // brute force traversal
+    ListNode* solution2(vector<ListNode*>& lists) {
+        int n = lists.size();
+        vector<int> nums;
+        
+        // visited all values & sort
+        for(int i=0; i<n; ++i)
+        {
+            ListNode *temp = lists[i];
+            while(temp)
+            {
+                nums.push_back(temp->val);
+                temp = temp->next;
+            }
+        }
+        sort(nums.begin(), nums.end());
+        
+        // create new node for all node
+        ListNode *result = nullptr;
+        ListNode *cur = nullptr;
+        if(nums.size()>0)
+        {
+            result = new ListNode(nums[0]);
+            cur = result;
+        }
+        for(int i=1; i<nums.size(); ++i)
+        {
+            cur->next = new ListNode(nums[i]);
+            cur = cur->next;
+        }
+        
+        return result;
+    }
+};
+```

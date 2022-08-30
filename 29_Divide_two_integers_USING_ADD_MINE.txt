@@ -1,0 +1,50 @@
+class Solution {
+public:
+    int divide(int dividend, int divisor) {
+        long divd = dividend;
+        long divs = divisor;
+        
+        long result = 0;
+        bool isnegative = false;
+        
+        // flag the polarity of result
+        if((divd>0&&divs<0) || (divd<0&&divs>0))
+            isnegative = true;
+        
+        divd = abs(divd);
+        divs = abs(divs);
+        if(divd<divs) return 0;
+        
+        if(divs==1)
+        {
+            result = (isnegative) ? -divd : divd;
+            if(result >INT_MAX) return INT_MAX;
+            if(result < INT_MIN) return INT_MIN;
+            return result;
+        }
+        
+        // calculation
+        long newdivs = divs;
+        int count = 1;
+        while(divd>0 && divd>=divs)
+        {
+//cout << "START :"  << newdivs << " , " << divd << "; " << result << endl;
+            if(newdivs <= divd)
+            {
+                divd -= newdivs;
+                result += count;
+                newdivs += newdivs;
+                count += count;
+            }
+            else
+            {
+                count = 1;
+                newdivs = divs;
+            }
+//cout << "END :" <<  newdivs << " , " << divd << "; " << result << endl;
+        }
+        
+        result = (isnegative) ? -result : result;
+        return result;
+    }
+};
