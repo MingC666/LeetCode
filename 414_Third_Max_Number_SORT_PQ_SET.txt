@@ -1,0 +1,30 @@
+class Solution {
+public:
+    int thirdMax(vector<int>& nums) {
+        sort(nums.begin(), nums.end(), greater<int>());
+        
+        int find = 1;
+        int index = 1;
+        for(; index<nums.size(); ++index)
+        {
+            if(nums[index] != nums[index-1])
+            {
+                find++;
+                if(find == 3)
+                    return nums[index];
+            }
+        }
+        return nums[0];
+    }
+    
+    int solution1(vector<int>& nums) {
+        unordered_set<int> myset (nums.begin(), nums.end());
+        priority_queue<int> pq (myset.begin(), myset.end());
+        
+        if(pq.size()<3)
+            return pq.top();
+        pq.pop();
+        pq.pop();
+        return pq.top();
+    }
+};
