@@ -46,19 +46,23 @@ Output: 2
   // base case 
   if(meetings.size() == 0) return 0;
   if(meetings.size() == 1) return 1;
+  
   //   {0, 10},    {5, 30}, {10, 15}, {20, 20}, 
   pq.push(meetings[0][1]);
   for(int i=1; i< meetings.size(); i++)
     {
-//cout << meetings[i][0] << "," << meetings[i][1] << "     : " ;
+      // adding new end_time of the meeting if it need a new person to join
+      // if the start_time of the meeting are in OR later than earlest end meeting, we pop
+      // the earlest one meeting and add new end_time to 'pq'
       if(meetings[i][0] >= pq.top())
       {
         pq.pop();
         pq.push(meetings[i][1]);
       }
+      // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       else        // forgot the ELSE statment, wichi will push all endtime to the 'pq'......
         pq.push(meetings[i][1]);
-//cout << pq.size() << "and "  << pq.top() << endl;
+
     }
   
   return pq.size();
