@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        // we need fin the MIN price, and calculate it with MAX price
+        int maxprofit = 0;
+        if(prices.size()<2) return maxprofit;
+        
+        int minprice = prices[0];
+        for(int i=1; i<prices.size(); ++i)
+        {
+            if(prices[i] < minprice)
+                minprice = prices[i];
+            
+            maxprofit = max(maxprofit, prices[i]-minprice);
+        }
+        return maxprofit;
+    }
+};

@@ -1,0 +1,40 @@
+class Solution {
+public:
+    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
+        // calculate the # of total values in two arrays, and see it is odd or even
+        int n1 = nums1.size();
+        int n2 = nums2.size();
+        int size = n1 + n2;
+        bool iseven = (size%2 == 0) ? true : false;
+        int m = size/2;
+        
+        
+        // merger two arrays
+        vector<int> result;
+        int t1=0, t2=0;
+        for(int i=0; i<size; i++)
+        {
+            if(t1 > n1-1) // nums1 is end
+            {
+                result.push_back(nums2[t2++]);
+            }
+            else if(t2 > n2-1)
+            {
+                result.push_back(nums1[t1++]);
+            }
+            else if(nums1[t1] > nums2[t2])
+            {
+                result.push_back(nums2[t2++]);
+            }
+            else
+            {
+                result.push_back(nums1[t1++]);
+            }
+        }
+        if(iseven)
+        {
+            return ((double)result[m]+result[m-1])/2;
+        }
+        return result[m];
+    }
+};

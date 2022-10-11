@@ -1,0 +1,42 @@
+// we track the farthest distance we can move upon the current position we are, 
+// when 'i' come to the 'cur' position, we need make a move, which bring up to the farthest distance(cur=fathest)
+// only need calculate the move before the last index, we will be there as garantee
+
+class Solution {
+public:
+    int jump(vector<int>& nums) {
+        int jumps = 0;      // record the # of moves
+        int current = 0;    // record the current distance we are
+        int distance = 0;   // record the fartherest distance we can reach so far
+        
+        for(int i=0; i<nums.size()-1; ++i)
+        {
+            distance = max(distance, i+nums[i]);
+            
+            if(i == current)
+            {
+                jumps++;
+                current = distance;
+            }
+        }
+        
+        return jumps;
+    }
+    
+    int dynamic_programming(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> dp(n, INT_MAX);
+        dp[0] = 0;
+        
+        for(int i=0; i<n-1; ++i)
+        {
+            for(int j=i+1; j<=i+nums[i]; ++j)
+            {
+                if(j<n)
+                    dp[j] = min(dp[j], dp[i]+1);
+            }
+        }
+        
+        return dp[n-1];
+    }
+};

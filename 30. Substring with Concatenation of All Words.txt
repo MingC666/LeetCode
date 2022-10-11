@@ -1,0 +1,53 @@
+class Solution {
+public:
+    vector<int> findSubstring(string s, vector<string>& words) {
+        int n = words.size();
+        int l = words[0].size();
+        int total_l = l*n;
+        if(s.size() < total_l) return {};
+        map<string, int> mp;
+        vector<int> result;
+        
+        for(auto w:words) mp[w]++;
+        string word;
+        for(int i=0; i<=s.size()-total_l; ++i)
+        {
+//cout << " CHECKING          " << s[i] << endl;
+            word = s.substr(i, l);
+            if(mp.count(word))
+            {
+                bool find = checking(i, l, n, s, mp);   
+                if(find)
+                {
+                    result.push_back(i);
+                }
+            }
+        }
+        return result;
+    }
+    
+    bool checking(int index, int word_length, int word_size, const string s, map<string, int> mp)
+    {
+//cout << "checking " <<  word_length << " and " << word_size << endl;
+        string w;
+// for(auto it: mp) cout << it.first << " -- " << it.second << "; " ;
+// cout<< endl;
+        for(int i=0; i<word_size; i++, index+=word_length)
+        {
+            w = s.substr(index, word_length);
+//cout << w << endl;
+            if(mp.count(w) == 0)
+            {
+                return false;
+            }
+            else
+            {
+                mp[w]--;
+                if(mp[w] < 0)
+                    return false;
+            }
+        }
+//cout << "found";
+        return true;
+    }
+};

@@ -1,0 +1,135 @@
+class Solution {
+public:
+    string addBinary(string a, string b) {
+        // reverse(a.begin(), a.end());
+        // reverse(b.begin(), b.end());
+        
+        int na = a.size()-1;
+        int nb = b.size()-1;
+        int carry = 0;
+        string result = "";
+        
+        while(na>=0 || nb>=0)
+        {
+            if(na>=0)
+            {
+                carry += a[na] - '0';
+                --na;
+            }
+            if(nb>=0)
+            {
+                carry += b[nb] - '0';
+                --nb;
+            }
+            result += (carry % 2 + '0');
+            carry = carry / 2;
+        }
+        cout << carry ;
+        if(carry == 1)
+            result += '1';
+        reverse(result.begin(), result.end());
+        return result;
+    }
+    
+    
+    string solution1(string a, string b) {
+        stack<char> sta;
+        stack<char> stb;
+        for(char c:a)
+            sta.push(c);
+        for(char c:b)
+            stb.push(c);
+        
+        string result = "";
+        char carry = '0';
+        
+        while(!sta.empty() || !stb.empty())
+        {
+            if(sta.empty())
+            {
+                oneleft(stb, carry, result);
+                stb.pop();
+            }
+            else if(stb.empty())
+            {
+                oneleft(sta, carry, result);
+                cout << carry << endl;
+                sta.pop();
+            }
+            else
+            {
+                if(carry=='1')
+                {
+                    if(sta.top()=='1' && stb.top()=='1')
+                    {
+                        result += '1';
+                        carry = '1';
+                    }
+                    else if(sta.top()=='0' && stb.top()=='0')
+                    {
+                        result += '1';
+                        carry = '0';
+                    }
+                    else    // sta.top()=='1' || stb.top()=='1'
+                    {
+                        result += '0';
+                        carry = '1';
+                    }
+                }
+                else    // carry =='0'
+                {
+                    if(sta.top()=='1' && stb.top()=='1')
+                    {
+                        result += '0';
+                        carry = '1';
+                    }
+                    else if(sta.top()=='0' && stb.top()=='0')
+                    {
+                        result += '0';
+                        carry = '0';
+                    }
+                    else    // sta.top()=='1' || stb.top()=='1'
+                    {
+                        result += '1';
+                        carry = '0';
+                    }
+                    //cout << sta.top() << ", " << stb.top() <<  ", carry : " << carry << " : " << result << endl;;
+                }
+                sta.pop();
+                stb.pop();
+            }
+        }
+        if(carry == '1')
+            result += '1';
+        reverse(result.begin(), result.end());
+        return result;
+    }
+    void oneleft(stack<char> &st, char &carry, string &result)
+    {
+        if(carry=='1')
+        {
+            if(st.top()=='1')
+            {
+                result += '0';
+                carry = '1';
+            }
+            else if(st.top()=='0')
+            {
+                result += '1';
+                carry = '0';
+            }
+        }
+        else    // carry =='0'
+        {
+            if(st.top()=='1')
+            {
+                result += '1';
+            }
+            else if(st.top()=='0')
+            {
+                result += '0';
+            }
+            carry = '0';
+        }
+    }
+};

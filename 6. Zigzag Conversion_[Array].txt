@@ -1,0 +1,37 @@
+class Solution {
+public:
+    string convert(string s, int numRows) {
+        // we need a table to map the 's' to Zigzag format, 
+        // it will go down to 'numRows-1' then go up to row0 repeatedly, from s[0] to 's'.length
+        
+        // base case
+        if(numRows==1) return s;
+        
+        // variable initialization
+        string table[numRows];     // table to map 's' to Zigzag
+        bool godown = false;         // flag to track the up/down direction
+        int currentRow = 0;         // tracking the current row of Zigzag table
+        
+        // strat looping each character and map to table
+        for(auto c:s)
+        {
+            table[currentRow] += c;
+            
+            // if 'currentRow' is 0 or last row, we need switch the up/down direction
+            if(currentRow==0 || currentRow==numRows-1)
+            {
+                godown = !godown;
+            }
+            // change the 'currentRow' accordingly for each character
+            currentRow = godown ? currentRow+1 : currentRow-1;
+        }
+        
+        
+        // put each row characters into 'result'
+        string result = "";
+        for(auto s:table)
+            result += s;
+        
+        return result;
+    }
+};
